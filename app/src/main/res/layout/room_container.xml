@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:context="com.planetkershaw.heatingtest.ui.MainActivity">
+
+    <RelativeLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <TextView
+            android:id="@+id/roomname"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginBottom="5dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/outside"
+            android:textAppearance="?android:attr/textAppearanceLarge"/>
+
+        <View
+            android:id="@+id/spacer1"
+            android:layout_marginBottom="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@+id/roomname"
+            android:background="@android:color/darker_gray"/>
+
+        <TextView
+            android:id="@+id/currenttemp"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/spacer1"
+            android:textAppearance="?android:attr/textAppearanceLarge"/>
+        <TextView
+            android:id="@+id/roomtemp"
+            android:layout_toRightOf="@+id/currenttemp"
+            android:layout_toEndOf="@+id/currenttemp"
+            android:layout_alignBaseline="@+id/currenttemp"
+            android:layout_below="@+id/spacer1"
+            android:layout_marginLeft="5dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <RadioGroup
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_below="@+id/spacer1"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:id="@+id/modeSelector">
+        <RadioButton
+            android:id="@+id/modeOnOff"
+            style="@style/ModeOnOffButton"
+            />
+        <RadioButton
+            android:id="@+id/modeTimer"
+            style="@style/ModeTimerButton"
+            />
+        <RadioButton
+            android:id="@+id/modeBoost"
+            style="@style/ModeBoostButton"
+            />
+        </RadioGroup>
+
+        <View
+            android:id="@+id/spacer2"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@+id/modeSelector"
+            android:background="@android:color/darker_gray"/>
+
+        <!-- ************************************************************************************* -->
+        <!-- Boost Details                                                                         -->
+        <!-- ************************************************************************************* -->
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_below="@+id/spacer2"
+            android:id="@+id/boostDetails" >
+                <TextView
+                        android:id="@+id/boosttemp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="5dip"
+                        android:text="Boost temperature: "
+                        android:textAppearance="?android:attr/textAppearanceMedium" />
+                    <TextView
+                        android:id="@+id/boosttime"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="5dip"
+                        android:text="Boost Time Remaining: "
+                        android:textAppearance="?android:attr/textAppearanceMedium" />
+                    <Button
+                        android:id="@+id/boostTempBtn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="5dip"
+                        android:text="Set Temperature"
+                        android:textAppearance="?android:attr/textAppearanceMedium" />
+                    <Button
+                        android:id="@+id/boostTimeBtn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dip"
+                        android:text="Set Duration"
+                        android:textAppearance="?android:attr/textAppearanceMedium" />
+                    <TextView
+                        android:id="@+id/boostinfo"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="5dip"
+                        android:text="This zone is currently overridden and will return to timer when the duration expires"
+                        android:textAppearance="?android:attr/textAppearanceSmall" />
+        </LinearLayout>
+
+        <!-- ************************************************************************************* -->
+        <!-- Schedule Details                                                                      -->
+        <!-- ************************************************************************************* -->
+        <RadioGroup
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_below="@+id/spacer2"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="10dp"
+            android:id="@+id/scheduleDays">
+            <RadioButton
+                android:id="@+id/mon"
+                style="@style/DayLabel"
+                android:text="M"
+                />
+            <RadioButton
+                android:id="@+id/tue"
+                style="@style/DayLabel"
+                android:text="T"
+                />
+            <RadioButton
+                android:id="@+id/wed"
+                style="@style/DayLabel"
+                android:text="W"
+                />
+            <RadioButton
+                android:id="@+id/thu"
+                style="@style/DayLabel"
+                android:text="T"
+                />
+            <RadioButton
+                android:id="@+id/fri"
+                style="@style/DayLabel"
+                android:text="F"
+                />
+            <RadioButton
+                android:id="@+id/sat"
+                style="@style/DayLabel"
+                android:text="S"
+                />
+            <RadioButton
+                android:id="@+id/sun"
+                style="@style/DayLabel"
+                android:text="S"
+                />
+        </RadioGroup>
+
+        <ListView xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/listview"
+            android:layout_below="@+id/scheduleDays"
+            android:layout_centerHorizontal="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <Button
+            android:id="@+id/addTimerBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dip"
+            android:text="+"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <!-- ************************************************************************************* -->
+        <!-- Hot Water Pump                                                                        -->
+        <!-- ************************************************************************************* -->
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_below="@+id/listview"
+            android:id="@+id/hotWaterPump" >
+            <TextView
+                        android:id="@+id/pumpStatus"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="5dip"
+                        android:text="Hot Water Pump is ON "
+                        android:textAppearance="?android:attr/textAppearanceMedium" />
+            <Switch
+                        android:id="@+id/pumpButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="20dip"
+                        android:scaleX="2"
+                        android:scaleY="2" />
+
+            <TextView
+                android:id="@+id/pumptime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="5dip"
+                android:text="Pump Time Remaining: "
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+            <Button
+                android:id="@+id/pumpTimeBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dip"
+                android:text="Set Duration"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/scheduleBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dip"
+            android:text="Edit Schedule"
+            android:layout_alignParentBottom="true"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    </RelativeLayout>
+
+
+
+
+
+</android.support.design.widget.CoordinatorLayout>

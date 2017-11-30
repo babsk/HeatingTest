@@ -1,0 +1,99 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/Gray</item>
+        <item name="colorPrimaryDark">@color/DarkSlateGray</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="HourLabel" parent="@android:style/TextAppearance.Medium">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:layout_height">30dp</item>
+        <item name="android:layout_weight">0.04</item>
+    </style>
+
+    <style name="DayLabel" parent="@android:style/TextAppearance.Medium">
+        <item name="android:layout_width">40dp</item>
+        <item name="android:layout_height">40dp</item>
+        <item name="android:button">@null</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_margin">2dp</item>
+        <item name="android:padding">5dp</item>
+        <item name="android:background">@drawable/daybutton</item>
+        <item name="android:textColor">@drawable/daybuttontext</item>
+    </style>
+
+    <style name="ModeOnOffButton" parent="@android:style/Widget.CompoundButton.RadioButton">
+        <item name="android:layout_width">40dp</item>
+        <item name="android:layout_height">40dp</item>
+        <item name="android:button">@null</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_margin">2dp</item>
+        <item name="android:padding">5dp</item>
+        <item name="android:background">@drawable/modebutton_off</item>
+    </style>
+
+    <style name="LightOnButton" parent="@android:style/Widget.CompoundButton.RadioButton">
+        <item name="android:layout_width">40dp</item>
+        <item name="android:layout_height">40dp</item>
+        <item name="android:button">@null</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_margin">2dp</item>
+        <item name="android:padding">5dp</item>
+        <item name="android:background">@drawable/light_on</item>
+    </style>
+
+    <style name="LightOffButton" parent="@android:style/Widget.CompoundButton.RadioButton">
+        <item name="android:layout_width">40dp</item>
+        <item name="android:layout_height">40dp</item>
+        <item name="android:button">@null</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_margin">2dp</item>
+        <item name="android:padding">5dp</item>
+        <item name="android:background">@drawable/light_off</item>
+    </style>
+
+    <style name="ModeTimerButton" parent="@android:style/Widget.CompoundButton.RadioButton">
+        <item name="android:layout_width">40dp</item>
+        <item name="android:layout_height">40dp</item>
+        <item name="android:button">@null</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_margin">2dp</item>
+        <item name="android:padding">5dp</item>
+        <item name="android:background">@drawable/modebutton_timer</item>
+    </style>
+
+    <style name="ModeBoostButton" parent="@android:style/Widget.CompoundButton.RadioButton">
+        <item name="android:layout_width">40dp</item>
+        <item name="android:layout_height">40dp</item>
+        <item name="android:button">@null</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_margin">2dp</item>
+        <item name="android:padding">5dp</item>
+        <item name="android:background">@drawable/modebutton_boost</item>
+    </style>
+
+    <style name="TimeLabel" parent="@android:style/TextAppearance.Medium">
+        <item name="android:layout_width">40dp</item>
+        <item name="android:layout_height">40dp</item>
+        <item name="android:button">@null</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_margin">2dp</item>
+        <item name="android:padding">5dp</item>
+        <item name="android:background">@drawable/time_label</item>
+    </style>
+
+
+</resources>

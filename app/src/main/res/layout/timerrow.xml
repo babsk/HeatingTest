@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+
+    <TextView
+        android:id="@+id/setpoint"
+        android:gravity="center"
+        android:background="@drawable/timer_off"
+        android:layout_marginTop="6dp"
+        android:layout_marginRight="8dp"
+        android:textSize="28px"
+        android:textStyle="bold|normal"
+        android:textColor="@color/Black"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+    </TextView>
+
+    <TextView
+        android:id="@+id/start"
+        android:layout_toRightOf="@+id/setpoint"
+        android:layout_marginTop="6dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:text="@+id/label"
+        android:textColor="@color/Black"
+        android:textSize="34px" >
+    </TextView>
+
+    <TextView
+        android:id="@+id/end"
+        android:layout_toRightOf="@+id/start"
+        android:layout_alignTop="@+id/start"
+        android:layout_marginTop="6dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:text="@+id/label"
+        android:textColor="@color/LightSlateGray"
+        android:textSize="34px" >
+    </TextView>
+
+    <Button
+        android:id="@+id/timer_delete"
+        android:background="@drawable/ic_delete_white_48dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="6dp"
+        android:layout_gravity="right"
+        android:focusable="false"
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"
+        android:layout_width="40dp"
+        android:layout_height="40dp">
+    </Button>
+
+</RelativeLayout>

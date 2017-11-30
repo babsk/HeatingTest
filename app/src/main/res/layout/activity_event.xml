@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="com.planetkershaw.heatingtest.ui.EditEventActivity">
+
+    <TextView
+        android:id="@+id/edit_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20dp"
+        android:layout_centerHorizontal="true"
+        android:text="Edit Event"
+        android:layout_alignParentTop="true"
+        android:gravity="top"
+        android:layout_marginBottom="10dp" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@null"
+        android:text="Cancel"
+        android:textColor="@color/DarkOrange"
+        android:textSize="20dp"
+        android:id="@+id/edit_cancel"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:gravity="top"
+        android:layout_below="@+id/edit_title" />
+
+
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@null"
+        android:text="Save"
+        android:textColor="@color/DarkOrange"
+        android:textSize="20dp"
+        android:id="@+id/edit_save"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:gravity="end|top"
+        android:layout_below="@+id/edit_title" />
+
+
+
+
+    <TextView
+        android:id="@+id/edit_day"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/edit_cancel"
+        android:textSize="20dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignBottom="@+id/edit_delete"
+        android:text="Day"
+        android:gravity="bottom" />
+    <TextView
+        android:id="@+id/edit_start_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/edit_day"
+        android:layout_below="@id/edit_cancel"
+        android:gravity="bottom"
+        android:textSize="20dp"
+        android:layout_marginLeft="32dp"
+        android:layout_alignBottom="@+id/edit_delete"
+        android:text="00:00"/>
+    <TextView
+        android:id="@+id/edit_end_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/edit_start_time"
+        android:layout_below="@id/edit_cancel"
+        android:gravity="bottom"
+        android:layout_alignBottom="@+id/edit_delete"
+        android:textSize="20dp"
+        android:textColor="@color/LightGrey"
+        android:text=" - 00:00"/>
+
+    <Button
+        android:background="@drawable/ic_delete_white_48dp"
+        android:layout_width="48dp"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:id="@+id/edit_delete"
+        android:layout_below="@id/edit_cancel"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <ImageView
+        android:id="@+id/edit_temp_background"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/edit_day"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/temp_circle"
+        android:layout_marginTop="32dp"/>
+
+    <NumberPicker
+        android:id="@+id/edit_temp_picker"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/edit_day"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="32dp"
+        android:descendantFocusability="blocksDescendants"
+        />
+
+    <TimePicker
+        android:id="@+id/edit_tp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/edit_temp_picker"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="32dp"
+        android:timePickerMode="spinner"
+        />
+
+
+
+</RelativeLayout>
