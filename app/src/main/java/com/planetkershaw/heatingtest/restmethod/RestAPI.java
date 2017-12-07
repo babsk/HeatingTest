@@ -63,8 +63,6 @@ public class RestAPI
     {
         String urlParameters = schedule.toJSON();
 
-        Log.d("RESTAPI",urlParameters);
-
         this.roomId = id;
 
         new RestTask(getURLbase()+"hillview/schedule/"+id,cookie,true,urlParameters,RequestType.SET_SCHEDULE.ordinal(),handler).execute((Void)null);
@@ -116,7 +114,7 @@ public class RestAPI
         RoomList.clear();
         if (responseBody != null)
         {
-            String data = "";
+            String data = "rooms response";
             try {
                 JSONObject jsonRootObject = new JSONObject(responseBody);
 
@@ -173,13 +171,14 @@ public class RestAPI
                     }
 
 
-                    data += "Room" + i + " : \n id= " + id + " \n Name= " + title + " \n Pump Status " + pumpStatus + " \n";
-                    Log.d("RESTAPI",data);
+//                    data += "Room" + i + " : \n id= " + id + " \n Name= " + title + " \n Pump Status " + pumpStatus + " \n";
+
 
                     RoomList.addRoom(id,title,desiredTemp,currentTemp,externalTemp,hasTempSensor,type,mode,base,schedule,
                             callForHeat,location,boostTemp,boostDuration,boostTimeRemaining,pumpStatus, pumpDuration, pumpTimeRemaining);
 
                 }
+                Log.d("RESTAPI",data);
 
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -198,7 +197,7 @@ public class RestAPI
         LightList.clear();
         if (responseBody != null)
         {
-            String data = "";
+            String data = "lights response";
             try {
                 JSONObject jsonRootObject = new JSONObject(responseBody);
 
@@ -219,11 +218,11 @@ public class RestAPI
                     else
                         tag = "unknown";
 
-                    data += "Light" + i + " : \n id= " + id + " \n Name= " + title + " \n Status= " + status + " \n";
-                    Log.d("RESTAPI",data);
+//                    data += "Light" + i + " : \n id= " + id + " \n Name= " + title + " \n Status= " + status + " \n";
 
                     LightList.addLight(id,title,status);
                 }
+                Log.d("RESTAPI",data);
 
             } catch (JSONException e) {
                 e.printStackTrace();

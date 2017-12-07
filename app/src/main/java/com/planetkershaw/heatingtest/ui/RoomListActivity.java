@@ -48,15 +48,7 @@ public class RoomListActivity extends BaseListActivity
     private RoomDetailFragment fragment;
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        adapter.notifyDataSetChanged();
-        updateData();
-    }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_room_list);
 
@@ -93,6 +85,20 @@ public class RoomListActivity extends BaseListActivity
         };
         registerReceiver(mReceiver, new IntentFilter(DataChangedReceiver.ACTION_HEATING_DATA_CHANGED));
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        registerReceiver(mReceiver, new IntentFilter(DataChangedReceiver.ACTION_HEATING_DATA_CHANGED));
+        adapter.notifyDataSetChanged();
+        updateData();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        unregisterReceiver (mReceiver);
     }
 
     // display new data

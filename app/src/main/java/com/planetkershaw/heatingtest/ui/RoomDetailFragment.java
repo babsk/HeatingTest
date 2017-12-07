@@ -271,6 +271,7 @@ public class RoomDetailFragment extends Fragment implements Handler.Callback, Te
         };
         addTimerBtn.setOnClickListener (addTimerBtnListener);
 
+
         // schedule for a single day - list of timer intervals
         listview = (ListView) rootView.findViewById(R.id.listview);
         listview.setVisibility(View.INVISIBLE);

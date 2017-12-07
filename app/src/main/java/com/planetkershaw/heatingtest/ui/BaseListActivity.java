@@ -91,9 +91,22 @@ public class BaseListActivity extends AppCompatActivity
             }
 
         };
-        registerReceiver(errorReceiver, new IntentFilter(DataChangedReceiver.ACTION_NETWORK_ERROR));
+//        registerReceiver(errorReceiver, new IntentFilter(DataChangedReceiver.ACTION_NETWORK_ERROR));
 
         thisActivity = this;
+    }
+
+    @Override
+    protected void onResume()
+    {
+        super.onResume();
+        registerReceiver(errorReceiver, new IntentFilter(DataChangedReceiver.ACTION_NETWORK_ERROR));
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        unregisterReceiver (errorReceiver);
     }
 
     // create an action bar button for a data refresh

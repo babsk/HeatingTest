@@ -35,8 +35,15 @@ public class LightListActivity extends BaseListActivity implements Handler.Callb
     @Override
     protected void onResume() {
         super.onResume();
+        registerReceiver(mReceiver, new IntentFilter(DataChangedReceiver.ACTION_LIGHTING_DATA_CHANGED));
         adapter.notifyDataSetChanged();
         updateData();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        unregisterReceiver (mReceiver);
     }
 
     @Override
@@ -64,7 +71,6 @@ public class LightListActivity extends BaseListActivity implements Handler.Callb
             }
 
         };
-        registerReceiver(mReceiver, new IntentFilter(DataChangedReceiver.ACTION_LIGHTING_DATA_CHANGED));
     }
 
     // display new data

@@ -14,6 +14,28 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Scanner;
 
+/**************************************************************************************************
+
+ RestTask is an AsyncTask that is created each time an API request is made.
+ The constructor takes the following parameters:
+
+ urlstring - the url and specific end point of the API,
+             eg http://<ip addr>:<port>/ZAutomation/API/v1/login
+ sid - session identifier ie the cookie returned after logging in
+ doOutput - true for POST, false for GET
+ payload
+ reqid - used to match up the original request
+ handler - called from onPostExecute to tell the original caller we have a response
+
+ To use, create an instance of RestTask and then call execute()
+ This invokes the following steps:
+
+ 1. A call to onPreExecute() on the UI thread - not implemented
+ 2. A call to doInBackground() on the background thread
+ 3. Possible calls to onProgressUpdate on the UI thread (only if publishProgress is called)
+ 4. A call to onPostExecute() on the UI thread once doInBackground completes
+
+ **************************************************************************************************/
 
 public class RestTask extends AsyncTask<Void, Void, RestTask.APIResponse>
 {
@@ -28,6 +50,7 @@ public class RestTask extends AsyncTask<Void, Void, RestTask.APIResponse>
     public static final String REQID = "reqid";
     public static final String ERROR = "error";
 
+    // an instance of this class is returned from doInBackground
     public class APIResponse
     {
         public String response;
@@ -77,7 +100,7 @@ public class RestTask extends AsyncTask<Void, Void, RestTask.APIResponse>
             urlConnection.connect();
             int statusCode = urlConnection.getResponseCode();
             if (statusCode != HttpURLConnection.HTTP_OK) {
-                Log.d("", "doInBackground(): connection failed: statusCode: " + statusCode);
+                Log.d("RESTTASK", "doInBackground(): connection failed: statusCode: " + statusCode);
                 error = statusCode;
             }
             else {
@@ -100,11 +123,12 @@ public class RestTask extends AsyncTask<Void, Void, RestTask.APIResponse>
             }
         }
 
+        // package up the results into a single object
         apiResponse = new APIResponse (responseText,error);
         return apiResponse;
     }
 
-    void processResponse (APIResponse response){
+    private void processResponse (APIResponse response){
         Message message = new Message();
         Bundle data = new Bundle();
         data.putString(PAYLOAD, response.response);
@@ -115,12 +139,14 @@ public class RestTask extends AsyncTask<Void, Void, RestTask.APIResponse>
     }
 
     @Override
-    protected void onPostExecute(final APIResponse output)
+    protected void onPostExecute(APIResponse output)
     {
         processResponse (output);
     }
 
     @Override
+    // TODO: this is going to cause an exception in processResponse, but I must have put it here
+    // TODO: for a reason?
     protected void onCancelled()
     {
         processResponse (null);

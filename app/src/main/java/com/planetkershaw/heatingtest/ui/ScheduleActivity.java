@@ -155,7 +155,7 @@ public class ScheduleActivity extends AppCompatActivity implements TimerDialogFr
             scheduleRow.setLayoutParams(lp);
 
             scheduleRow.setId(SCHEDULE_ROW_ID + day);
-            ((TextView)scheduleRow.findViewById(R.id.label)).setText(Schedule.TimerItem.days_short[day]);
+            ((TextView)scheduleRow.findViewById(R.id.day_label)).setText(Schedule.TimerItem.days_short[day]);
 
             final MultiSeekBar<Integer> daySeekBar = new MultiSeekBar<Integer>(this, day);
 
