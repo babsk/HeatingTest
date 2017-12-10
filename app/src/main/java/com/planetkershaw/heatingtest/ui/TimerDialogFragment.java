@@ -1,16 +1,14 @@
 package com.planetkershaw.heatingtest.ui;
 
-import android.app.Activity;
-import android.content.Intent;
+import android.app.Dialog;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.v4.app.DialogFragment;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -45,7 +43,11 @@ public class TimerDialogFragment extends DialogFragment implements TextView.OnEd
         // set this instance as callback for editor action
         mEditText.setOnEditorActionListener(this);
         mEditText.requestFocus();
-        getDialog().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+        Dialog dlg = getDialog();
+        assert dlg != null;
+        Window wnd = dlg.getWindow();
+        assert wnd != null;
+        wnd.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
         getDialog().setTitle("Please enter new temperature:");
 
         return view;

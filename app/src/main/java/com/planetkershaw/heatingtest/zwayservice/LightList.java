@@ -6,7 +6,7 @@ import java.util.List;
 public class LightList
 {
     // array of light items
-    public static final List<LightItem> ITEMS = new ArrayList<LightItem>();
+    public static final List<LightItem> ITEMS = new ArrayList<>();
 
     public static final void clear ()
     {
@@ -44,7 +44,7 @@ public class LightList
     {
         public final String id;
         public final String title;
-        public final boolean status;
+        private final boolean status;
 
         public LightItem(String id, String title, boolean status)
         {

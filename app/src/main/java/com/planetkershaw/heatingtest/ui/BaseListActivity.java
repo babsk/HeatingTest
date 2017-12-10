@@ -8,38 +8,26 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
-import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.CompoundButton;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
-import android.widget.Switch;
-import android.widget.TextView;
 
 import com.planetkershaw.heatingtest.HeatingTestApp;
 import com.planetkershaw.heatingtest.R;
 import com.planetkershaw.heatingtest.zwayservice.DataChangedReceiver;
-import com.planetkershaw.heatingtest.zwayservice.LightList;
 import com.planetkershaw.heatingtest.zwayservice.TimeService;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.List;
 
 public class BaseListActivity extends AppCompatActivity
 {
@@ -159,7 +147,8 @@ public class BaseListActivity extends AppCompatActivity
         toolbar = (Toolbar) findViewById(id);
         setSupportActionBar(toolbar);
         toolbar.setTitle(title);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        ActionBar ab = getSupportActionBar();
+        if (ab != null) ab.setDisplayHomeAsUpEnabled(true);
     }
 
     protected void setupMenuDrawer () {
@@ -171,13 +160,12 @@ public class BaseListActivity extends AppCompatActivity
                 "Away Mode"
 
         };
-        rightMenu.setAdapter(new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,menuItems));
+        rightMenu.setAdapter(new ArrayAdapter<>(this,android.R.layout.simple_list_item_1,menuItems));
 
 
         rightMenu.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String entry = (String) parent.getAdapter().getItem(position);
                 Intent intent = new Intent("com.planetkershaw.SETTINGS");
                 startActivity(intent);
             }

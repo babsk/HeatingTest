@@ -1,5 +1,6 @@
 package com.planetkershaw.heatingtest.ui;
 
+
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
@@ -41,7 +42,6 @@ public class ScheduleActivity extends AppCompatActivity implements TimerDialogFr
     private Button btnSubmit;
 
     private TableLayout scheduleTable;//, timerTable;
-    private TableRow scheduleLabels;
     private RelativeLayout.LayoutParams timerLP;
     private TextView timerView;
 
@@ -125,9 +125,10 @@ public class ScheduleActivity extends AppCompatActivity implements TimerDialogFr
 
         lp.setMargins(10, 0, 10, 2);
 
+
         scheduleTable = (TableLayout) findViewById(R.id.schedule);
 
-        LayoutInflater inflater = (LayoutInflater)getApplicationContext().getSystemService(this.LAYOUT_INFLATER_SERVICE);
+        LayoutInflater inflater = (LayoutInflater)getApplicationContext().getSystemService(AppCompatActivity.LAYOUT_INFLATER_SERVICE);
         TableRow scheduleLabels = (TableRow)inflater.inflate(R.layout.schedule_day, null);
         scheduleLabels.setLayoutParams(lp);
         LinearLayout labels = (LinearLayout)scheduleLabels.findViewById(R.id.seekbar_placeholder);
@@ -157,7 +158,7 @@ public class ScheduleActivity extends AppCompatActivity implements TimerDialogFr
             scheduleRow.setId(SCHEDULE_ROW_ID + day);
             ((TextView)scheduleRow.findViewById(R.id.day_label)).setText(Schedule.TimerItem.days_short[day]);
 
-            final MultiSeekBar<Integer> daySeekBar = new MultiSeekBar<Integer>(this, day);
+            final MultiSeekBar<Integer> daySeekBar = new MultiSeekBar<>(this, day);
 
             setupSeekBar(daySeekBar);
 
@@ -249,13 +250,7 @@ public class ScheduleActivity extends AppCompatActivity implements TimerDialogFr
                     // to the previous seekbar (or the last seekbar)
                     if (id == 0) id = 6;
                     else id--;
-
-                    // and the index is of the last thumb in that seekbar
-                    index = scheduleDisplay.get(id).numTimers()-1;
                 }
-
-                // close existing dialog fragments
- //               FragmentManager manager = getFragmentManager();
 
                 // setup the moving timer label
                 timerView = (TextView)findViewById(R.id.timer);
@@ -267,18 +262,6 @@ public class ScheduleActivity extends AppCompatActivity implements TimerDialogFr
                 timerLP.rightMargin = -250;
                 timerView.setLayoutParams(timerLP);
                 timerView.setVisibility(View.INVISIBLE);
-
-                // get the current fragment
- //               Fragment frag = manager.findFragmentByTag("room_detail_fragment");
-
- /*               // bring up a dialog to enter a temperature
-                TimerDialogFragment timerDialog = new TimerDialogFragment();
-                Bundle args = new Bundle();
-                args.putInt("day", id);
-                args.putInt("index",index);
-                timerDialog.setArguments(args);
-                timerDialog.setTargetFragment(frag, 0);
-                timerDialog.show(manager, "fragment_edit_hour");*/
             }
         });
 

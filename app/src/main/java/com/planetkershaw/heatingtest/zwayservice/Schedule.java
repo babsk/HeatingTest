@@ -9,54 +9,43 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
 
+/**************************************************************************
+
+ An object of type Schedule is created for each room or light group that is
+ returned in the zway API.
+
+ Essentially a Schedule is a list of TimerItems and methods allowing for
+ the addition, deletion, clearing, sorting, comparison and getting of timers.
+
+ In addition it has a toJSON method for encoding requests to set schedules.
+
+ The list of TimerItems should always be sorted after additions and deletions.
+
+ **************************************************************************/
 public class Schedule implements Cloneable
 {
     // array of timer items
-    private List<TimerItem> ITEMS = new ArrayList<TimerItem>();
+    private List<TimerItem> ITEMS = new ArrayList<>();
 
-    public Schedule ()
-    {
-
+    // default constructor which just creates an empty list
+    public Schedule () {
     }
 
-    public int getNextEvent () {
-        Calendar calendar = Calendar.getInstance();
-        int day = calendar.get(Calendar.DAY_OF_WEEK)-1;
-        int hour = calendar.get(Calendar.HOUR_OF_DAY);
-        int minute = calendar.get(Calendar.MINUTE);
-
-        int currTimeVal = day * 24 * 60 + hour * 60 + minute;
-
-        int event;
-        for (event=0; event<this.getSize(); event++) {
-            // look for the next event past where we are
-            int timeVal = this.getTimer(event).day * 24 * 60 + this.getTimer(event).hour * 60 + this.getTimer(event).minute;
-            if (timeVal > currTimeVal)
-                break;
-        }
-
-        // check for wrap, assign first event if reached end
-        if (event == this.getSize()) {
-            event = 0;
-        }
-
-        return event;
-    }
-
-    protected Schedule (Schedule another)
-    {
-        for (int i=0; i<another.getSize(); i++)
-        {
+    // this constructor is used when cloning a schedule
+    protected Schedule (Schedule another) {
+        for (int i=0; i<another.getSize(); i++) {
             TimerItem timer = another.getTimer(i);
             this.addTimer(timer.day, timer.hour, timer.minute, timer.sp);
         }
     }
 
+    // empty the schedule
     public void clear ()
     {
         ITEMS.clear();
     }
 
+    // sort the schedule from earliest to latest timer event
     public void sort () {
         Collections.sort(this.ITEMS);
     }
@@ -96,8 +85,8 @@ public class Schedule implements Cloneable
         return ITEMS.get(i);
     }
 
-    public TimerItem addTimer (int day, int hour, int minute, double sp)
-    {
+    // add a timer event to the list
+    public TimerItem addTimer (int day, int hour, int minute, double sp) {
         TimerItem timer = new TimerItem (day, hour, minute, sp);
         ITEMS.add(timer);
         return timer;
@@ -107,15 +96,6 @@ public class Schedule implements Cloneable
     public boolean removeTimer (int id) {
         ITEMS.remove(id);
         return true;
-    }
-
-    public void setDefault ()
-    {
-        for (int day=0; day<7; day++)
-        {
-            // TODO: store these values somewhere
-            this.addTimer (day,0,0,4);
-        }
     }
 
     public TimerItem getTimer (int id)
@@ -128,8 +108,9 @@ public class Schedule implements Cloneable
         return ITEMS.size();
     }
 
-    public Object clone()
-    {
+    @Override
+    // TODO: not using clone yet, needs implementing properly
+    public Object clone() {
         return new Schedule(this);
     }
 
@@ -167,6 +148,31 @@ public class Schedule implements Cloneable
         return null;
     }
 
+    public int getNextEvent () {
+        Calendar calendar = Calendar.getInstance();
+        int day = calendar.get(Calendar.DAY_OF_WEEK)-1;
+        int hour = calendar.get(Calendar.HOUR_OF_DAY);
+        int minute = calendar.get(Calendar.MINUTE);
+
+        int currTimeVal = day * 24 * 60 + hour * 60 + minute;
+
+        int event;
+        for (event=0; event<this.getSize(); event++) {
+            // look for the next event past where we are
+            int timeVal = this.getTimer(event).day * 24 * 60 + this.getTimer(event).hour * 60 + this.getTimer(event).minute;
+            if (timeVal > currTimeVal)
+                break;
+        }
+
+        // check for wrap, assign first event if reached end
+        if (event == this.getSize()) {
+            event = 0;
+        }
+
+        return event;
+    }
+
+
 
     // timer item
     public static class TimerItem implements Comparable<TimerItem>{
@@ -185,6 +191,10 @@ public class Schedule implements Cloneable
         }
 
         @Override
+        // used for sorting, return values as follows:
+        // -ve integer - timer argument is before this timer
+        // +ve integer - timer argument is after this timer
+        // 0 - timer argument is the same as this timer
         public int compareTo(TimerItem timer) {
             if (this.day != timer.day) {
                 return this.day - timer.day;

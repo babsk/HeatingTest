@@ -4,11 +4,8 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.os.Message;
@@ -22,21 +19,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RadioGroup;
-import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
 
 import com.planetkershaw.heatingtest.HeatingTestApp;
 import com.planetkershaw.heatingtest.R;
 import com.planetkershaw.heatingtest.restmethod.RestAPI;
-import com.planetkershaw.heatingtest.utils.MultiSeekBar;
 import com.planetkershaw.heatingtest.zwayservice.DataChangedReceiver;
 import com.planetkershaw.heatingtest.zwayservice.RoomList;
 import com.planetkershaw.heatingtest.zwayservice.Schedule;
@@ -71,7 +64,6 @@ public class RoomDetailFragment extends Fragment implements Handler.Callback, Te
     private TextView currentText, tempText, boostTemp, boostTime, pumpStatus, pumpTime,titleText;
     Button pumpDurationBtn, boostDurationBtn, boostTempBtn, scheduleBtn;
     private RadioGroup modeSelector;
-    private String modes [] = {"off","schedule","boost"};
     private View.OnClickListener modeBtnListener;
     private Button onoffBtn, timerBtn, boostBtn;
     private Button modeBtn [];
@@ -172,7 +164,7 @@ public class RoomDetailFragment extends Fragment implements Handler.Callback, Te
                 int index = getModeIndex(v.getId());
                 RoomList.Mode mode = RoomList.Mode.values()[index + 1];
                 RoomList.RoomItem room = RoomList.get(roomId);
-                if (mode != room.mode) {
+                if ((room != null) && (mode != room.mode)) {
                     Log.d("ROOMDETAILFRAGMENT", "mode change for " + room.title);
                     reqType = RestAPI.RequestType.SET_MODE;
                     app.restAPI.modeRequest(new Handler(callback), room.id, mode.ordinal());
@@ -276,13 +268,12 @@ public class RoomDetailFragment extends Fragment implements Handler.Callback, Te
         listview = (ListView) rootView.findViewById(R.id.listview);
         listview.setVisibility(View.INVISIBLE);
         MyTimerObject[] emptyTimers = new MyTimerObject[]{};
-        timers = new ArrayList<MyTimerObject>(Arrays.asList(emptyTimers));
+        timers = new ArrayList<>(Arrays.asList(emptyTimers));
         timerAdapter = new MyTimerObjectArrayAdapter(app, timers);
         listview.setAdapter(timerAdapter);
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    MyTimerObject entry = (MyTimerObject) parent.getAdapter().getItem(position);
                     Context context = view.getContext();
                     Intent intent = new Intent(context, EditEventActivity.class);
                     intent.putExtra(EditEventActivity.ARG_ITEM_ID, roomId);
@@ -331,8 +322,9 @@ public class RoomDetailFragment extends Fragment implements Handler.Callback, Te
 
     private void updateRoomSummary (int id) {
         RoomList.RoomItem room = RoomList.get(id);
+        assert room != null;
 
-        titleText.setText(RoomList.get(id).title);
+        titleText.setText(room.title);
 
         if (room.type == RoomList.Type.ONOFF) {
             tempText.setText(room.targetTemp == 0 ? "OFF" : "ON");
@@ -424,20 +416,22 @@ public class RoomDetailFragment extends Fragment implements Handler.Callback, Te
 
         int day = getDayIndex(id);
         RoomList.RoomItem room = RoomList.get(roomId);
+        assert room != null;
+
         Schedule schedule = room.schedule;
 
         timers.clear();
 
-        for (int i=0; i<schedule.getSize(); i++) {
-            Schedule.TimerItem t = schedule.getTimer(i);
-            if (t.day == day) {
-                Schedule.TimerItem next;
-                String extra = "";
-                if (i == schedule.getSize()-1) next = schedule.getTimer(0);
-                else next = schedule.getTimer(i+1);
-                if (next.day != day) extra = " ("+next.dayToString()+")";
-                timers.add (new MyTimerObject (t.sp,t.timeToString(),next.timeToString()+extra));
-            }
+        for (int i = 0; i < schedule.getSize(); i++) {
+                Schedule.TimerItem t = schedule.getTimer(i);
+                if (t.day == day) {
+                    Schedule.TimerItem next;
+                    String extra = "";
+                    if (i == schedule.getSize() - 1) next = schedule.getTimer(0);
+                    else next = schedule.getTimer(i + 1);
+                    if (next.day != day) extra = " (" + next.dayToString() + ")";
+                    timers.add(new MyTimerObject(t.sp, t.timeToString(), next.timeToString() + extra));
+                }
 
         }
 
@@ -452,8 +446,8 @@ public class RoomDetailFragment extends Fragment implements Handler.Callback, Te
 
         public MyTimerObject (double sp, String start, String end) {
             this.setPoint = sp;
-            this.startTime = new String(start);
-            this.endTime = new String(end);
+            this.startTime = start;
+            this.endTime = end;
         }
     }
 
@@ -486,6 +480,7 @@ public class RoomDetailFragment extends Fragment implements Handler.Callback, Te
             });
 
             RoomList.RoomItem room = RoomList.get(roomId);
+            assert room != null;
             int color;
             String text;
             if (room.type == RoomList.Type.ONOFF) {
@@ -595,7 +590,7 @@ public class RoomDetailFragment extends Fragment implements Handler.Callback, Te
             case DIALOG_BOOST_DURATION:
                 int duration = Integer.parseInt(value);
                 Log.d("ROOM", "boost duration change for " + roomId + " of " + duration);
-                reqType = RestAPI.RequestType.SET_BOOST_DURATION;;
+                reqType = RestAPI.RequestType.SET_BOOST_DURATION;
                 app.restAPI.boostDurationRequest(new Handler(callback), roomId, duration);
                 break;
         }
@@ -648,7 +643,6 @@ public class RoomDetailFragment extends Fragment implements Handler.Callback, Te
 
     private void removeTimer (View v) {
 
-        Context context = v.getContext();
         int timerId = (int)v.getTag();
 
         int day = getDayIndex(scheduleDays.getCheckedRadioButtonId());
@@ -657,6 +651,7 @@ public class RoomDetailFragment extends Fragment implements Handler.Callback, Te
         int scheduleEntryIdx = -1;
 
         RoomList.RoomItem room = RoomList.get(roomId);
+        assert room != null;
 
         // create a copy of the schedule
         // make a copy of the received schedule

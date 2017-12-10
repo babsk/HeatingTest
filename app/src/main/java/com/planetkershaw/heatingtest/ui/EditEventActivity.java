@@ -12,8 +12,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.NumberPicker;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
@@ -36,13 +34,9 @@ public class EditEventActivity extends AppCompatActivity implements Handler.Call
 
     private RestAPI.RequestType reqType;
 
-
     private TextView startTimeTv, endTimeTv;
     private TextView dayTv;
     private TextView titleTv;
-    private RadioGroup btnGroup;
-    private RadioButton startBtn;
-    private RadioButton endBtn;
     private TimePicker tp;
     private ImageView tempBck;
     private NumberPicker tempNp;
@@ -51,15 +45,11 @@ public class EditEventActivity extends AppCompatActivity implements Handler.Call
     private Button cancelBtn;
     private Button deleteBtn;
 
-    private boolean start = true;
-
     private Schedule scheduleCopy;
 
     private Schedule.TimerItem currentTimer;
     private double temperature;
 
-    private View.OnClickListener timerBtnListener;
-    private View.OnClickListener deleteBtnListener;
     private TimePicker.OnTimeChangedListener timerListener;
 
     private HeatingTestApp app;
@@ -262,7 +252,7 @@ public class EditEventActivity extends AppCompatActivity implements Handler.Call
 
     private void updateTimeDisplay () {
         // and we would like to display the next timer
-        Schedule.TimerItem nextTimer = null;
+        Schedule.TimerItem nextTimer;
         nextTimer = scheduleCopy.getNextTimer(currentTimer);
         // display the timer interval
         startTimeTv.setText(currentTimer.timeToString());

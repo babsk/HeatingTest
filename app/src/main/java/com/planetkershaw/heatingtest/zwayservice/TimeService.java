@@ -9,13 +9,10 @@ import android.net.wifi.WifiManager;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
-import android.widget.Toast;
 
 import com.planetkershaw.heatingtest.HeatingTestApp;
 import com.planetkershaw.heatingtest.restmethod.RestAPI;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -96,7 +93,7 @@ public class TimeService extends Service implements Handler.Callback {
         if (error != 0) {
             // TODO: retry a few times before alerting listeners
             Intent intent = new Intent(DataChangedReceiver.ACTION_NETWORK_ERROR);
-            intent.putExtra("error", app.restAPI.getStatusText(error));
+            intent.putExtra("error", RestAPI.getStatusText(error));
             app.sendBroadcast(new Intent(intent));
         }
         else {

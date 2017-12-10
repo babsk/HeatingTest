@@ -1,6 +1,5 @@
 package com.planetkershaw.heatingtest.restmethod;
 
-
 import android.os.Handler;
 import android.util.Log;
 
@@ -13,19 +12,34 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class RestAPI
-{
+/**************************************************************************************************
+
+ RestAPI contains request/response functions for each API endpoint used by the application.
+
+ Each request function creates a RestTask in order to carry out the network call on a separate
+ thread to the UI. When the response is received, control is passed back to the UI thread and
+ a call to RestTask onPostExecute is made. This feeds the response back to the original calling
+ activity via the handler.
+
+ When the calling activity's handler callback is called, it matches up the response and then
+ calls the RestAPI response function to decode it. This is on the main UI thread. No issues so
+ far, but possibly doing more work than it should.
+
+ TODO: check how much work involved in decoding responses
+
+ **************************************************************************************************/
+
+public class RestAPI {
     public String cookie = null;
     private int roomId;
-    HeatingTestApp app;
+    private HeatingTestApp app;
 
     //TODO: lots more strings need extracting from the code
     private final String apiURL = "/ZAutomation/api/v1/";
 
     public enum RequestType {LOGIN, GET_ROOMS, SET_MODE, SET_BOOST_TEMP, SET_BOOST_DURATION, SET_PUMP, SET_SCHEDULE, GET_LIGHTS, SET_LIGHT}
 
-    public RestAPI (HeatingTestApp app)
-    {
+    public RestAPI (HeatingTestApp app) {
         //TODO: make singleton
         this.app = app;
     }
@@ -34,16 +48,14 @@ public class RestAPI
         return app.zway_url + ":" + app.zway_port + apiURL;
     }
 
-    public void loginRequest (String username,String password, Handler handler)
-    {
+    public void loginRequest (String username,String password, Handler handler) {
         String payload = "{\"form\":true,\"login\":\"" + username + "\",\"password\":\""
                 + password + "\",\"keepme\":false,\"default_ui\":1}";
 
         new RestTask(getURLbase()+"login", cookie, true, payload, RequestType.LOGIN.ordinal(), handler).execute((Void) null);
     }
 
-    public void loginResponse (String responseBody)
-    {
+    public void loginResponse (String responseBody) {
         // extract the cookie
         try
         {
@@ -59,8 +71,7 @@ public class RestAPI
         }
     }
 
-    public void scheduleRequest (int id, Schedule schedule, Handler handler)
-    {
+    public void scheduleRequest (int id, Schedule schedule, Handler handler) {
         String urlParameters = schedule.toJSON();
 
         this.roomId = id;
@@ -79,38 +90,36 @@ public class RestAPI
         }
     }
 
-    public void scheduleResponse (String responseBody)
-    {
+    public void scheduleResponse (String responseBody) {
         if (responseBody != null)
         {
-            String data = "";
-            Schedule schedule = RoomList.get(roomId).schedule;
-            schedule.clear();
-            try {
-                JSONObject jsonRootObject = new JSONObject(responseBody);
-                JSONArray jsonArray = jsonRootObject.optJSONArray("data");
-                for (int i=0; i<jsonArray.length(); i++){
-                    JSONObject jsonObject = jsonArray.getJSONObject(i);
-                    int minute = Integer.parseInt(jsonObject.optString("minute").toString());
-                    int hour = Integer.parseInt(jsonObject.optString("hour").toString());
-                    int day = Integer.parseInt(jsonObject.optString("day").toString());
-                    double sp = Double.parseDouble(jsonObject.optString("sp").toString());
-                    schedule.addTimer (day,hour,minute,sp);
+            RoomList.RoomItem room = RoomList.get(roomId);
+            if (room != null) {
+                Schedule schedule = room.schedule;
+                schedule.clear();
+                try {
+                    JSONObject jsonRootObject = new JSONObject(responseBody);
+                    JSONArray jsonArray = jsonRootObject.optJSONArray("data");
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        JSONObject jsonObject = jsonArray.getJSONObject(i);
+                        int minute = Integer.parseInt(jsonObject.optString("minute"));
+                        int hour = Integer.parseInt(jsonObject.optString("hour"));
+                        int day = Integer.parseInt(jsonObject.optString("day"));
+                        double sp = Double.parseDouble(jsonObject.optString("sp"));
+                        schedule.addTimer(day, hour, minute, sp);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
-            } catch (JSONException e) {
-                e.printStackTrace();
             }
-
-            }
+        }
     }
 
-    public void roomsRequest (Handler handler)
-    {
+    public void roomsRequest (Handler handler) {
         new RestTask(getURLbase()+"hillview/rooms", cookie, false, null, RequestType.GET_ROOMS.ordinal(),handler).execute((Void) null);
     }
 
-    public void roomsResponse (String responseBody)
-    {
+    public void roomsResponse (String responseBody) {
         RoomList.clear();
         if (responseBody != null)
         {
@@ -125,20 +134,20 @@ public class RestAPI
                 for (int i = 0; i < jsonArray.length(); i++) {
                     JSONObject jsonObject = jsonArray.getJSONObject(i);
 
-                    int id = Integer.parseInt(jsonObject.optString("id").toString());
-                    double desiredTemp = Double.parseDouble(jsonObject.optString("desiredTemp").toString());
-                    double currentTemp = Double.parseDouble(jsonObject.optString("currentTemp").toString());
+                    int id = Integer.parseInt(jsonObject.optString("id"));
+                    double desiredTemp = Double.parseDouble(jsonObject.optString("desiredTemp"));
+                    double currentTemp = Double.parseDouble(jsonObject.optString("currentTemp"));
                     double externalTemp;
-                    boolean hasTempSensor = Boolean.parseBoolean(jsonObject.optString("hasTempSensor").toString());
-                    boolean callForHeat = Boolean.parseBoolean(jsonObject.optString("callForHeat").toString());
-                    String title = jsonObject.optString("title").toString();
-                    String location = jsonObject.optString("location").toString();
-                    RoomList.Type type = RoomList.Type.values()[Integer.parseInt(jsonObject.optString("type").toString())];
-                    RoomList.Mode mode = RoomList.Mode.values()[Integer.parseInt(jsonObject.optString("mode").toString())];
-                    RoomList.Mode base = RoomList.Mode.values()[Integer.parseInt(jsonObject.optString("baseMode").toString())];
-                    double boostTemp = Double.parseDouble(jsonObject.optString("boostSP").toString());
-                    int boostDuration = Integer.parseInt(jsonObject.optString("boostDuration").toString());
-                    int boostTimeRemaining = Integer.parseInt(jsonObject.optString("boostTimeRemaining").toString());
+                    boolean hasTempSensor = Boolean.parseBoolean(jsonObject.optString("hasTempSensor"));
+                    boolean callForHeat = Boolean.parseBoolean(jsonObject.optString("callForHeat"));
+                    String title = jsonObject.optString("title");
+                    String location = jsonObject.optString("location");
+                    RoomList.Type type = RoomList.Type.values()[Integer.parseInt(jsonObject.optString("type"))];
+                    RoomList.Mode mode = RoomList.Mode.values()[Integer.parseInt(jsonObject.optString("mode"))];
+                    RoomList.Mode base = RoomList.Mode.values()[Integer.parseInt(jsonObject.optString("baseMode"))];
+                    double boostTemp = Double.parseDouble(jsonObject.optString("boostSP"));
+                    int boostDuration = Integer.parseInt(jsonObject.optString("boostDuration"));
+                    int boostTimeRemaining = Integer.parseInt(jsonObject.optString("boostTimeRemaining"));
 
                     // optional fields relating to hot water pump
                     boolean pumpStatus = false;
@@ -148,31 +157,27 @@ public class RestAPI
                     String pumpDurationString = jsonObject.optString("pumpDuration");
                     String pumpTimeString = jsonObject.optString("pumpTimeRemaining");
                     if (!("".equals(pumpString) || "".equals(pumpDurationString) || "".equals(pumpTimeString))) {
-                        pumpStatus = Boolean.parseBoolean(pumpString.toString());
-                        pumpDuration = Integer.parseInt(pumpDurationString.toString());
-                        pumpTimeRemaining = Integer.parseInt(pumpTimeString.toString());
+                        pumpStatus = Boolean.parseBoolean(pumpString);
+                        pumpDuration = Integer.parseInt(pumpDurationString);
+                        pumpTimeRemaining = Integer.parseInt(pumpTimeString);
                     }
 
 
                     Schedule schedule = new Schedule ();
-                    String tempString = jsonObject.optString("externalTemp").toString();
-                    externalTemp = (tempString!="") ? Double.parseDouble(tempString) : 0;
+                    String tempString = jsonObject.optString("externalTemp");
+                    externalTemp = (!"".equals(tempString)) ? Double.parseDouble(tempString) : 0;
 
                     JSONArray jsonSchedule = jsonObject.optJSONArray("schedule");
                     int scheduleLength = jsonSchedule.length();
                     for (int j=0; j<scheduleLength; j++)
                     {
                         JSONObject jsonTimer = jsonSchedule.getJSONObject(j);
-                        int day = Integer.parseInt(jsonTimer.optString("day").toString());
-                        int hour = Integer.parseInt(jsonTimer.optString("hour").toString());
-                        int minute = Integer.parseInt(jsonTimer.optString("minute").toString());
-                        double sp = Double.parseDouble(jsonTimer.optString("sp").toString());
+                        int day = Integer.parseInt(jsonTimer.optString("day"));
+                        int hour = Integer.parseInt(jsonTimer.optString("hour"));
+                        int minute = Integer.parseInt(jsonTimer.optString("minute"));
+                        double sp = Double.parseDouble(jsonTimer.optString("sp"));
                         schedule.addTimer (day,hour,minute,sp);
                     }
-
-
-//                    data += "Room" + i + " : \n id= " + id + " \n Name= " + title + " \n Pump Status " + pumpStatus + " \n";
-
 
                     RoomList.addRoom(id,title,desiredTemp,currentTemp,externalTemp,hasTempSensor,type,mode,base,schedule,
                             callForHeat,location,boostTemp,boostDuration,boostTimeRemaining,pumpStatus, pumpDuration, pumpTimeRemaining);
@@ -187,13 +192,11 @@ public class RestAPI
 
     }
 
-    public void lightsRequest (Handler handler)
-    {
+    public void lightsRequest (Handler handler) {
         new RestTask(getURLbase()+"hillview/lights", cookie, false, null, RequestType.GET_LIGHTS.ordinal(),handler).execute((Void) null);
     }
 
-    public void lightsResponse (String responseBody)
-    {
+    public void lightsResponse (String responseBody) {
         LightList.clear();
         if (responseBody != null)
         {
@@ -207,18 +210,16 @@ public class RestAPI
                 //Iterate the jsonArray and print the info of JSONObjects
                 for (int i = 0; i < jsonArray.length(); i++) {
                     JSONObject jsonObject = jsonArray.getJSONObject(i);
-                    String id = jsonObject.optString("id").toString();
+                    String id = jsonObject.optString("id");
                     JSONObject metricObject = jsonObject.optJSONObject("metrics");
-                    String title = metricObject.optString("title").toString();
-                    boolean status = metricObject.optString("level").toString().equals ("off") ? false : true;
+                    String title = metricObject.optString("title");
+                    boolean status = !metricObject.optString("level").equals ("off");
                     String tag;
                     JSONArray tagsArray = jsonObject.optJSONArray("tags");
                     if (tagsArray.length() > 0)
                         tag = tagsArray.getString(0);
                     else
                         tag = "unknown";
-
-//                    data += "Light" + i + " : \n id= " + id + " \n Name= " + title + " \n Status= " + status + " \n";
 
                     LightList.addLight(id,title,status);
                 }
@@ -232,33 +233,28 @@ public class RestAPI
     }
 
 
-    public void modeRequest (Handler handler, int roomId, int mode)
-    {
+    public void modeRequest (Handler handler, int roomId, int mode) {
         String payload = "{\"data\":" + mode + "}";
         new RestTask(getURLbase()+"hillview/mode/"+roomId, cookie, true, payload, RequestType.SET_MODE.ordinal(), handler).execute((Void) null);
     }
 
-    public void pumpStatusRequest (Handler handler, int roomId, boolean status)
-    {
+    public void pumpStatusRequest (Handler handler, int roomId, boolean status) {
         String statusString = status ? "true" : "false";
         String payload = "{\"data\":" + "\""+statusString+"\"" + "}";
         new RestTask(getURLbase()+"hillview/pumpstatus/"+roomId, cookie, true, payload, RequestType.SET_PUMP.ordinal(), handler).execute((Void) null);
     }
 
-    public void boostTempRequest (Handler handler, int roomId, double temp)
-    {
+    public void boostTempRequest (Handler handler, int roomId, double temp) {
         String payload = "{\"data\":" + temp + "}";
         new RestTask(getURLbase()+"hillview/boostsp/"+roomId, cookie, true, payload, RequestType.SET_BOOST_TEMP.ordinal(),handler).execute((Void) null);
     }
 
-    public void boostDurationRequest (Handler handler, int roomId, int duration)
-    {
+    public void boostDurationRequest (Handler handler, int roomId, int duration) {
         String payload = "{\"data\":" + duration + "}";
         new RestTask(getURLbase()+"hillview/boostduration/"+roomId, cookie, true, payload, RequestType.SET_BOOST_DURATION.ordinal(), handler).execute((Void) null);
     }
 
-    public void lightStatusRequest (Handler handler, String lightId, boolean status)
-    {
+    public void lightStatusRequest (Handler handler, String lightId, boolean status) {
         String statusString = status ? "true" : "false";
         String payload = "{\"data\":" + "\""+statusString+"\"" + "}";
         new RestTask(getURLbase()+"hillview/lightstatus/"+lightId, cookie, true, payload, RequestType.SET_LIGHT.ordinal(), handler).execute((Void) null);

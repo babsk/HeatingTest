@@ -1,14 +1,12 @@
 package com.planetkershaw.heatingtest.zwayservice;
 
-import com.planetkershaw.heatingtest.zwayservice.Schedule;
-
 import java.util.ArrayList;
 import java.util.List;
 
 public class RoomList
 {
     // array of room items
-    public static final List<RoomItem> ITEMS = new ArrayList<RoomItem>();
+    public static final List<RoomItem> ITEMS = new ArrayList<>();
 
     // map of room items by id
     // TODO: research hash mapping

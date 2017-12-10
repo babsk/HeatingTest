@@ -8,14 +8,11 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.RelativeLayout;
-import android.widget.Switch;
 import android.widget.TextView;
 
 import com.planetkershaw.heatingtest.R;
@@ -117,7 +114,6 @@ public class LightListActivity extends BaseListActivity implements Handler.Callb
             extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
 
         private final List<LightList.LightItem> mValues;
-        public int selectedPos = 0;
         private View.OnClickListener onoffClickListener;
 
         public SimpleItemRecyclerViewAdapter(List<LightList.LightItem> items) {
@@ -156,18 +152,17 @@ public class LightListActivity extends BaseListActivity implements Handler.Callb
         }
 
         public class ViewHolder extends RecyclerView.ViewHolder {
-            public final View mView;
-            public final TextView mContentView;
-            public final TextView mTypeView;
-            public final RelativeLayout mLightView;
-            public LightList.LightItem mItem;
-            public Button mOnBtn;
-            public Button mOffBtn;
+
+            private final TextView mContentView;
+            private final TextView mTypeView;
+            private final RelativeLayout mLightView;
+            private LightList.LightItem mItem;
+            private Button mOnBtn;
+            private Button mOffBtn;
 
             public ViewHolder(View view)
             {
                 super(view);
-                mView = view;
                 mContentView = (TextView) view.findViewById(R.id.title);
                 mTypeView = (TextView) view.findViewById(R.id.type);
                 mLightView = (RelativeLayout) view.findViewById(R.id.item);
